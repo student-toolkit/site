@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College App Dashboard</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons -->
+    <script type="module" src="https://unpkg.com/lucide@latest"></script>
+    <!-- External styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="min-h-screen p-4 md:p-8 flex justify-center items-start">
+
+    <!-- Main Application Container -->
+    <div id="app-container" class="w-full max-w-4xl">
+
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-extrabold primary-color mb-1">
+                College Success Toolkit
+            </h1>
+            <p class="text-gray-500">Your assistant for academic tracking.</p>
+        </header>
+
+        <!-- Main Dashboard View (Visible by default) -->
+        <section id="dashboard" class="page-content block">
+            <h2 class="text-2xl font-semibold mb-6 text-gray-700">Select a Module</h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- 1. Attendance Calculator Card -->
+                <button class="nav-button app-card p-6 rounded-xl text-left focus:outline-none" onclick="showPage('attendance')">
+                    <i data-lucide="calendar-check" class="primary-color w-8 h-8 mb-3"></i>
+                    <h3 class="text-xl font-bold text-gray-800">Attendance</h3>
+                    <p class="text-sm text-gray-500 mt-1">Track classes and maintain eligibility for exams.</p>
+                </button>
+
+                <!-- 2. CGPA/SGPA Calculator Card -->
+                <button class="nav-button app-card p-6 rounded-xl text-left focus:outline-none" onclick="showPage('cgpa')">
+                    <i data-lucide="trending-up" class="primary-color w-8 h-8 mb-3"></i>
+                    <h3 class="text-xl font-bold text-gray-800">CGPA / SGPA</h3>
+                    <p class="text-sm text-gray-500 mt-1">Calculate your semester and cumulative scores.</p>
+                </button>
+
+                <!-- 3. Marks Calculator Card -->
+                <button class="nav-button app-card p-6 rounded-xl text-left focus:outline-none" onclick="showPage('marks')">
+                    <i data-lucide="clipboard-check" class="primary-color w-8 h-8 mb-3"></i>
+                    <h3 class="text-xl font-bold text-gray-800">Marks</h3>
+                    <p class="text-sm text-gray-500 mt-1">Estimate final marks based on internal scores.</p>
+                </button>
+
+                <!-- 4. Free Courses Card (UPDATED ORDER) -->
+                <button class="nav-button app-card p-6 rounded-xl text-left focus:outline-none" onclick="showPage('free-courses')">
+                    <i data-lucide="graduation-cap" class="primary-color w-8 h-8 mb-3"></i>
+                    <h3 class="text-xl font-bold text-gray-800">Courses & Training</h3>
+                    <p class="text-sm text-gray-500 mt-1">Access 20+ skill-building courses from top tech companies.</p>
+                </button>
+
+                <!-- 5. About Website Card (RENAMED & REORDERED) -->
+                <button class="nav-button app-card p-6 rounded-xl text-left focus:outline-none" onclick="showPage('about')">
+                    <i data-lucide="info" class="primary-color w-8 h-8 mb-3"></i>
+                    <h3 class="text-xl font-bold text-gray-800">About Website</h3>
+                    <p class="text-sm text-gray-500 mt-1">Information and credits for this application.</p>
+                </button>
+            </div>
+        </section>
+
+        <!-- Page Content Modules (Initially Hidden) -->
+
+        <!-- 1. Attendance Calculator Page -->
+        <section id="attendance" class="page-content app-card p-8 rounded-xl">
+            <!-- UPDATED BACK BUTTON STYLE -->
+            <button onclick="showPage('dashboard')" class="back-nav-btn mb-4 flex items-center">
+                <i data-lucide="chevron-left" class="w-4 h-4 mr-1"></i> Back to Dashboard
+            </button>
+            <h2 class="text-2xl font-bold primary-color mb-6 border-b pb-2">Attendance Calculator</h2>
+            <p class="text-gray-600 mb-6">Track your current status and determine how many classes you can leave or must attend to meet the target percentage (default 75%).</p>
+
+            <div class="space-y-4 max-w-lg mx-auto">
+                <div class="flex flex-col space-y-2">
+                    <label for="attendedClasses" class="text-gray-700 font-medium">Classes Attended (Current):</label>
+                    <input type="number" id="attendedClasses" class="app-input" placeholder="e.g., 45" min="0" value="">
+                </div>
+                <div class="flex flex-col space-y-2">
+                    <label for="totalClasses" class="text-gray-700 font-medium">Total Classes Held (Current):</label>
+                    <input type="number" id="totalClasses" class="app-input" placeholder="e.g., 60" min="0" value="">
+                </div>
+                <div class="flex flex-col space-y-2">
+                    <label for="minPercentage" class="text-gray-700 font-medium">Minimum Required Percentage (Target):</label>
+                    <input type="number" id="minPercentage" class="app-input" placeholder="e.g., 75" min="50" max="100" value="75">
+                </div>
+                
+                <button onclick="calculateAttendance()" class="app-button primary-bg text-white primary-hover w-full mt-6 flex items-center justify-center">
+                    <i data-lucide="calculator" class="w-5 h-5 mr-2"></i> Calculate Attendance Status
+                </button>
+            </div>
+
+            <div id="attendanceResult" class="mt-8 result-box p-6 rounded-lg hidden">
+                <h3 class="text-xl font-bold primary-color mb-3 flex items-center">
+                    <i data-lucide="check-circle" class="w-6 h-6 mr-2"></i> Your Attendance Analysis
+                </h3>
+                <!-- Results will be displayed here -->
+            </div>
+        </section>
+
+        <!-- 2. CGPA/SGPA Calculator Page (UPDATED COLUMNS & NAVIGATION) -->
+        <section id="cgpa" class="page-content app-card p-8 rounded-xl">
+            <!-- UPDATED BACK BUTTON STYLE -->
+            <button onclick="showPage('dashboard')" class="back-nav-btn mb-4 flex items-center">
+                <i data-lucide="chevron-left" class="w-4 h-4 mr-1"></i> Back to Dashboard
+            </button>
+            <h2 class="text-2xl font-bold primary-color mb-6 border-b pb-2">SGPA Calculator (Semester)</h2>
+            <p class="text-gray-600 mb-6">Enter the grades and credits for up to 10 subjects. (S=10, A=9, B=8, C=7, D=6, E=5, F=0)</p>
+
+            <div class="max-w-xl mx-auto">
+                <!-- Header row adjusted for consistent 3-column grid and SWAPPED order -->
+                <div class="subject-grid font-bold text-gray-700 mb-2 p-2">
+                    <span>Subject #</span>
+                    <!-- Swapped Order: Grade on Left, Credit on Right -->
+                    <span>Grade (S-F)</span> 
+                    <span>Credit</span>
+                </div>
+                
+                <!-- Subject Input Container -->
+                <div id="subjectInputs" class="space-y-3 mb-6">
+                    <!-- Initial 10 subject rows will be inserted here by JS -->
+                </div>
+
+                <div class="flex justify-between gap-4">
+                    <button id="addSubjectBtn" onclick="addSubjectRow()" class="app-button bg-gray-400 cursor-not-allowed text-gray-700 flex-1 flex items-center justify-center" disabled>
+                        <i data-lucide="plus" class="w-5 h-5 mr-2"></i> Add Subject
+                    </button>
+                    <button onclick="calculateSGPA()" class="app-button primary-bg text-white primary-hover flex-1 flex items-center justify-center">
+                        <i data-lucide="check" class="w-5 h-5 mr-2"></i> Calculate SGPA
+                    </button>
+                </div>
+
+                <div id="sgpaResult" class="mt-8 result-box p-6 rounded-lg hidden">
+                    <h3 class="text-xl font-bold primary-color mb-3 flex items-center">
+                        <i data-lucide="star" class="w-6 h-6 mr-2"></i> Semester Results
+                    </h3>
+                    <!-- SGPA results will be displayed here -->
+                </div>
+            </div>
+
+            <div id="cgpaSection" class="mt-10 pt-6 border-t border-gray-200">
+                <h3 class="text-xl font-bold text-gray-700 mb-4">Cumulative Grade Point Average (CGPA)</h3>
+                <p class="text-gray-500">
+                    If you have 2 semesters, enter both SGPA values to find your overall CGPA.
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4 max-w-lg">
+                    <input type="number" id="sgpa1Input" class="app-input" placeholder="SGPA 1 (e.g., 9.2)" step="0.01" min="0" max="10">
+                    <input type="number" id="sgpa2Input" class="app-input" placeholder="SGPA 2 (e.g., 8.8)" step="0.01" min="0" max="10">
+                    <button onclick="calculateCGPA()" class="app-button primary-bg text-white primary-hover">
+                        Calculate CGPA
+                    </button>
+                </div>
+                <div id="cgpaResult" class="mt-4 result-box p-4 rounded-lg hidden">
+                    <!-- CGPA results will be displayed here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Marks Calculator Page -->
+        <section id="marks" class="page-content app-card p-8 rounded-xl">
+            <!-- UPDATED BACK BUTTON STYLE -->
+            <button onclick="showPage('dashboard')" class="back-nav-btn mb-4 flex items-center">
+                <i data-lucide="chevron-left" class="w-4 h-4 mr-1"></i> Back to Dashboard
+            </button>
+            <h2 class="text-2xl font-bold primary-color mb-6 border-b pb-2">Marks Calculator (80/20 Internal Rule)</h2>
+            <p class="text-gray-600 mb-6">Estimate your required scores to secure maximum internal marks (16) and pass the subject (40 total). Mid exams are out of 30 marks.</p>
+
+            <div class="space-y-4 max-w-lg mx-auto">
+                <div class="flex flex-col space-y-2">
+                    <label for="mid1Score" class="text-gray-700 font-medium">Score in First Mid Exam (Out of 30):</label>
+                    <input type="number" id="mid1Score" class="app-input" placeholder="e.g., 25" min="0" max="30" value="">
+                    <p class="text-xs text-gray-500">Enter a score between 0 and 30.</p>
+                </div>
+                
+                <button onclick="calculateMarks()" class="app-button primary-bg text-white primary-hover w-full mt-6 flex items-center justify-center">
+                    <i data-lucide="trending-up" class="w-5 h-5 mr-2"></i> Calculate Required Scores
+                </button>
+            </div>
+
+            <div id="marksResult" class="mt-8 result-box p-6 rounded-lg hidden">
+                <h3 class="text-xl font-bold primary-color mb-3 flex items-center">
+                    <i data-lucide="award" class="w-6 h-6 mr-2"></i> Score Requirement Analysis
+                </h3>
+                <!-- Results will be displayed here -->
+            </div>
+        </section>
+
+        <!-- 4. Free Courses Page (Links Verified/Stabilized) -->
+        <section id="free-courses" class="page-content app-card p-8 rounded-xl">
+            <!-- UPDATED BACK BUTTON STYLE -->
+            <button onclick="showPage('dashboard')" class="back-nav-btn mb-4 flex items-center">
+                <i data-lucide="chevron-left" class="w-4 h-4 mr-1"></i> Back to Dashboard
+            </button>
+            <h2 class="text-2xl font-bold primary-color mb-6 border-b pb-2">Global Certification And Training Courses (20+ Links)</h2>
+            <p class="text-gray-600 mb-6">
+                Explore a curated list of **20+ training courses** offered by leading worldwide technology companies and institutions. Expand your skill set! Click any link to go directly to the official course page.
+            </p>
+
+            <div class="space-y-8">
+                
+                <!-- Category 1: Generative AI & Cloud -->
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i data-lucide="atom" class="w-5 h-5 primary-color mr-2"></i> Generative AI & Cloud Computing
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <a href="https://aws.amazon.com/training/digital/aws-cloud-practitioner-essentials/" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank">
+                            <i data-lucide="cpu" class="w-5 h-5 text-purple-500 mr-3"></i> AWS Cloud Practitioner Essentials
+                        </a>
+                        <a href="https://learn.microsoft.com/en-us/credentials/certifications/azure-ai-fundamentals/" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank">
+                            <i data-lucide="bot" class="w-5 h-5 text-teal-500 mr-3"></i> Microsoft Azure AI-900 Prep Course
+                        </a>
+                        <a href="https://www.cloudskillsboost.google/course_templates/539" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank">
+                            <i data-lucide="database" class="w-5 h-5 text-red-500 mr-3"></i> Google Introduction to Generative AI
+                        </a>
+                        <a href="https://course.fast.ai/" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank"><i data-lucide="lightbulb" class="w-5 h-5 text-gray-400 mr-3"></i> Fast.ai Practical Deep Learning Course</a>
+                    </div>
+                </div>
+
+                <!-- Category 2: Cybersecurity & Networking -->
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i data-lucide="shield" class="w-5 h-5 primary-color mr-2"></i> Cybersecurity & Networking Essentials
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <a href="https://skillsforall.com/course/introduction-cybersecurity" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank">
+                            <i data-lucide="wifi" class="w-5 h-5 text-emerald-500 mr-3"></i> Cisco Networking Academy: Intro to Cybersecurity
+                        </a>
+                        <a href="https://www.coursera.org/professional-certificates/ibm-cybersecurity-analyst" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank">
+                            <i data-lucide="fingerprint" class="w-5 h-5 text-pink-500 mr-3"></i> IBM Cybersecurity Analyst Prof Cert (Audit)
+                        </a>
+                        <a href="https://portswigger.net/web-security" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank"><i data-lucide="shield-half" class="w-5 h-5 text-emerald-400 mr-3"></i> OWASP Web Application Security Top 10</a>
+                        <a href="https://www.f-secure.com/en/business/resources/cyber-security-base" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank"><i data-lucide="key" class="w-5 h-5 text-red-400 mr-3"></i> F-Secure Cyber Security Base</a>
+                    </div>
+                </div>
+
+                <!-- Category 3: Data Science & Analytics -->
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i data-lucide="bar-chart-3" class="w-5 h-5 primary-color mr-2"></i> Data Science & Analytics
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <a href="https://www.coursera.org/professional-certificates/google-data-analytics" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank">
+                            <i data-lucide="trending-up" class="w-5 h-5 text-green-500 mr-3"></i> Google Data Analytics Prof Cert (Audit)
+                        </a>
+                        <a href="https://www.datacamp.com/courses/intro-to-python-for-data-science" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank">
+                            <i data-lucide="code" class="w-5 h-5 text-indigo-500 mr-3"></i> DataCamp Intro to Python for Data Science
+                        </a>
+                        <a href="https://www.coursera.org/professional-certificates/ibm-data-science" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank">
+                            <i data-lucide="pie-chart" class="w-5 h-5 text-red-500 mr-3"></i> IBM Data Science Professional Cert (Audit)
+                        </a>
+                        <a href="https://learn.microsoft.com/en-us/training/paths/get-started-power-bi/" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank"><i data-lucide="sigma" class="w-5 h-5 text-green-400 mr-3"></i> Microsoft Power BI Desktop Fundamentals</a>
+                        <a href="https://www.coursera.org/learn/r-programming" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank"><i data-lucide="align-start" class="w-5 h-5 text-indigo-400 mr-3"></i> R Programming Basics (Coursera Audit)</a>
+                        <a href="https://www.coursera.org/specializations/excel" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank"><i data-lucide="filter" class="w-5 h-5 text-blue-400 mr-3"></i> Excel Skills for Business (Macquarie - Audit)</a>
+                    </div>
+                </div>
+
+                <!-- Category 4: Software & Web Development -->
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i data-lucide="code" class="w-5 h-5 primary-color mr-2"></i> Software & Web Development
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <a href="https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank">
+                            <i data-lucide="laptop-2" class="w-5 h-5 text-amber-500 mr-3"></i> freeCodeCamp: JavaScript Algorithms & DS
+                        </a>
+                        <a href="https://www.theodinproject.com/paths/foundations" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank">
+                            <i data-lucide="server" class="w-5 h-5 text-slate-500 mr-3"></i> The Odin Project: Foundations Path
+                        </a>
+                        <a href="https://cs50.harvard.edu/x/2024/" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank">
+                            <i data-lucide="layout-dashboard" class="w-5 h-5 text-teal-500 mr-3"></i> Harvard CS50's Introduction to Computer Science
+                        </a>
+                        <a href="https://scrimba.com/learn/react" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank">
+                            <i data-lucide="react" class="w-5 h-5 text-sky-500 mr-3"></i> Scrimba React Basics (Free Modules)
+                        </a>
+                        <a href="https://developer.mozilla.org/en-US/docs/Learn" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank">
+                            <i data-lucide="braces" class="w-5 h-5 text-amber-400 mr-3"></i> MDN Web Docs Learning Area
+                        </a>
+                        <a href="https://www.typescriptlang.org/docs/handbook/intro.html" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank"><i data-lucide="mobile" class="w-5 h-5 text-teal-400 mr-3"></i> TypeScript Tutorial (Official Handbook)</a>
+                        <a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank"><i data-lucide="plug-2" class="w-5 h-5 text-sky-400 mr-3"></i> CSS Tricks: A Guide to Flexbox</a>
+                        <a href="https://www.w3.org/WAI/fundamentals/accessibility-intro/" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank"><i data-lucide="globe-2" class="w-5 h-5 text-pink-400 mr-3"></i> W3C Web Accessibility Introduction</a>
+                        <a href="https://www.coursera.org/learn/web-development" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank"><i data-lucide="layers-3" class="w-5 h-5 text-indigo-400 mr-3"></i> Intro to Web Development (UC Davis - Audit)</a>
+                    </div>
+                </div>
+
+                <!-- Category 5: Professional Development & Business Skills -->
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i data-lucide="briefcase" class="w-5 h-5 primary-color mr-2"></i> Professional Development & Business Skills
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <a href="https://www.coursera.org/professional-certificates/google-project-management" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank">
+                            <i data-lucide="user-check" class="w-5 h-5 text-blue-500 mr-3"></i> Google Project Management Cert (Audit)
+                        </a>
+                        <a href="https://oyc.yale.edu/economics/econ-252" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank">
+                            <i data-lucide="dollar-sign" class="w-5 h-5 text-yellow-500 mr-3"></i> Yale Open Course: Financial Markets
+                        </a>
+                        <a href="https://www.linkedin.com/learning/browse/free-courses" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank">
+                            <i data-lucide="trending-up" class="w-5 h-5 text-purple-500 mr-3"></i> LinkedIn Learning Free Courses
+                        </a>
+                        <a href="https://www.coursera.org/learn/resume-writing" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank"><i data-lucide="search" class="w-5 h-5 text-red-400 mr-3"></i> Resume Writing and Interviewing Skills (Audit)</a>
+                        <a href="https://www.coursera.org/learn/data-science-methodology" class="app-card p-4 rounded-lg hover:bg-gray-50 flex items-center" target="_blank"><i data-lucide="workflow" class="w-5 h-5 text-red-400 mr-3"></i> IBM Data Science Methodology (Audit)</a>
+                    </div>
+                </div>
+
+                <div class="text-center pt-4 border-t border-gray-100">
+                    <p class="text-sm text-gray-500 italic">This selection includes free-to-access courses, which may be "audit-only" (view material for free, pay for certificate) on platforms like Coursera/edX.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 5. About Website Page (RENAMED) -->
+        <section id="about" class="page-content app-card p-8 rounded-xl">
+            <!-- UPDATED BACK BUTTON STYLE -->
+            <button onclick="showPage('dashboard')" class="back-nav-btn mb-4 flex items-center">
+                <i data-lucide="chevron-left" class="w-4 h-4 mr-1"></i> Back to Dashboard
+            </button>
+            <h2 class="text-2xl font-bold primary-color mb-6 border-b pb-2">About The Scholar Companion Website</h2>
+            <div class="text-gray-600 space-y-4">
+                <p>
+                    The **Scholar Companion** is a specialized, mobile-first application designed to be your essential academic co-pilot. Built to meet the high standards of modern engineering and technology curricula, this toolkit offers fast, accurate, and professional tracking of your most critical academic metrics.
+                </p>
+                <p>
+                    <i data-lucide="zap" class="w-4 h-4 inline-block primary-color mr-1"></i>
+                    **This streamlined application transforms complex institutional calculation rules (like attendance requirements and internal marks distribution) into simple, instant, actionable insights.** It is designed to help you stay ahead of your requirements and focus on your studies.
+                </p>
+                <p class="text-sm text-gray-500 italic mt-4">
+                    <i data-lucide="loader" class="w-4 h-4 inline-block text-yellow-600 mr-1"></i>
+                    We are actively developing new features to integrate syllabus tracking and personalized timetable management, ensuring the tool continues to evolve with your academic needs.
+                </p>
+            </div>
+
+            <!-- Feedback Box -->
+            <div class="mt-8 border-t pt-6">
+                <h3 class="text-xl font-bold primary-color mb-3">Send Us Feedback</h3>
+                <p class="text-gray-600 mb-4">Your input helps us improve this tool for the entire community. Share your suggestions!</p>
+                <textarea id="feedbackTextarea" class="app-input h-24 resize-none" placeholder="Enter your comments or suggestions here..."></textarea>
+                <button onclick="submitFeedback()" class="app-button primary-bg text-white primary-hover w-full mt-3 flex items-center justify-center">
+                    <i data-lucide="mail" class="w-5 h-5 mr-2"></i> Submit Feedback via Email
+                </button>
+                <p id="feedbackMessage" class="text-sm text-green-600 mt-2 hidden">Launching your default email client with the feedback...</p>
+            </div>
+        </section>
+
+
+        <!-- Footer -->
+        <footer class="text-center mt-10 pt-4 border-t border-gray-200">
+            <p class="text-xs text-gray-400">© 2024 College Success Page. All rights reserved.</p>
+        </footer>
+
+    </div>
+
+    <!-- External JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>

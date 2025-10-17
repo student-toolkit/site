@@ -1,0 +1,86 @@
+/* Extracted styles from student_toolkit.html */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f7f7f7; /* Light background for professionalism */
+}
+
+/* Consistent card style for navigation and content modules */
+.app-card {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb; /* Light border */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nav-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.1), 0 4px 6px -4px rgba(37, 99, 235, 0.1);
+}
+
+/* Styling for the central blue theme */
+.primary-color {
+    color: #1e40af; /* Indigo 700 */
+}
+.primary-bg {
+    background-color: #1e40af; /* Indigo 700 */
+}
+.primary-hover:hover {
+    background-color: #1d4ed8; /* Indigo 600 */
+}
+
+/* Ensure content views start hidden */
+.page-content {
+    display: none;
+}
+
+/* Input styling */
+.app-input {
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    width: 100%;
+    transition: border-color 0.2s;
+}
+.app-input:focus {
+    border-color: #3b82f6; /* Blue 500 */
+    outline: none;
+}
+.app-button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.result-box {
+    border-left: 4px solid #1e40af;
+    background-color: #eff6ff; /* Light blue background */
+}
+
+/* Responsive grid for CGPA inputs (3 equal columns now, order: Subject | Grade | Credit) */
+.subject-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; 
+    gap: 1rem;
+}
+
+/* NEW: Styling for the enhanced "Back to Dashboard" button */
+.back-nav-btn {
+    padding: 8px 12px;
+    border-radius: 8px;
+    background-color: #eef2ff; /* Indigo 50 - very light blue background */
+    border: 1px solid #c7d2fe; /* Indigo 200 - light border */
+    color: #1e40af; /* Indigo 700 - primary color text */
+    transition: background-color 0.2s;
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 600;
+}
+.back-nav-btn:hover {
+    background-color: #e0e7ff; /* Indigo 100 - slightly darker hover */
+}
+/* Ensure the icon inherits the strong color */
+.back-nav-btn i {
+    color: #1e40af; /* Primary color */
+}
