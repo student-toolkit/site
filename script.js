@@ -387,7 +387,7 @@ function submitFeedback() {
     }
 
     // Encode the feedback for the URL
-    const subject = encodeURIComponent("Scholar Companion App Feedback");
+    const subject = encodeURIComponent("Student toolkit Feedback");
     const body = encodeURIComponent(`Feedback from user:\n\n${feedback}\n\n---`);
 
     const mailtoLink = `mailto:${RECIPIENT_EMAIL}?subject=${subject}&body=${body}`;
@@ -406,3 +406,4 @@ function submitFeedback() {
         feedbackMessage.classList.add('hidden');
     }, 5000); 
 }
+
