@@ -7,7 +7,7 @@ const gradeMap = {
     's': 10, 'a': 9, 'b': 8, 'c': 7, 'd': 6, 'e': 5, 'f': 0
 };
 // *** IMPORTANT: Placeholder email for receiving feedback. Please update this with your actual Gmail address. ***
-const RECIPIENT_EMAIL = "k.madangopal02@gmail.com"; 
+const RECIPIENT_EMAIL = "student.toolkit.site@gmail.com"; 
 
 
 // ====================================================================
@@ -406,4 +406,5 @@ function submitFeedback() {
         feedbackMessage.classList.add('hidden');
     }, 5000); 
 }
+
 
